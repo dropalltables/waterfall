@@ -1,0 +1,7 @@
+node_modules/
+dist/
+waterfall
+waterfall.exe
+mycli
+.DS_Store
+*.log
