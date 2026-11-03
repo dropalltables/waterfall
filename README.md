@@ -26,6 +26,8 @@ options:
 --sample-rate <hz>      PCM sample rate. Default: 32000
 --sample-bytes <1-4>    Bytes per PCM sample. Default: 1
 --channels <1|2>        Audio channel count. Default: 1
+--speed <auto|n>        Playback speed multiplier. Default: 1
+                        auto matches the byte rate in a WAV header, or 1 for other files.
 --fps <1-120>           Render frames per second. Default: 60
 --format <spec>         Pixel byte format. Default: bgrx
 --alignment <mode>      Playhead alignment: start, middle, end

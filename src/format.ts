@@ -17,6 +17,10 @@ export function formatTime(ms: number): string {
   return `${minutes}:${seconds.toString().padStart(2, "0")}.${tenths}`
 }
 
+export function formatSpeed(speed: number): string {
+  return `${Number(speed.toFixed(2))}x`
+}
+
 export function truncate(value: string, width: number): string {
   if (width <= 0) {
     return ""

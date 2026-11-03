@@ -5,14 +5,17 @@ import { clamp } from "./format"
 import { readInputFile } from "./input-file"
 import { PlaybackClock } from "./playback-clock"
 import { RawAudioPlayer } from "./raw-audio-player"
+import { playbackFormat } from "./speed"
 import { WaterfallView } from "./waterfall-view"
 
 export async function run(): Promise<void> {
   const options = parseArgs(Bun.argv.slice(2))
   const colorFormat = parseColorFormat(options.colorFormat)
   const { bytes, absolutePath } = await readInputFile(options.filePath)
-  const frameBytes = options.sampleRate * options.channels * options.sampleBytes
-  const durationMs = Math.max(1, (bytes.length / frameBytes) * 1000)
+  const format = playbackFormat(options, bytes)
+  const speed = format.sampleRate / options.sampleRate
+  const bytesPerSecond = format.sampleRate * format.channels * format.sampleBytes
+  const durationMs = Math.max(1, (bytes.length / bytesPerSecond) * 1000)
   const audio = Audio.create({
     autoStart: false,
     sampleRate: options.sampleRate,
@@ -56,8 +59,8 @@ export async function run(): Promise<void> {
 
     const activeRenderer = renderer
     const clock = new PlaybackClock(durationMs)
-    const view = new WaterfallView(activeRenderer, bytes, colorFormat, options, durationMs, absolutePath)
-    player = new RawAudioPlayer(audio, bytes, options, options.volume)
+    const view = new WaterfallView(activeRenderer, bytes, colorFormat, options, speed, durationMs, absolutePath)
+    player = new RawAudioPlayer(audio, bytes, format, options.volume)
     const activePlayer = player
 
     const stopWithError = (message: string) => {

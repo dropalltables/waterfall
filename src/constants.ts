@@ -4,6 +4,7 @@ export const DEFAULT_OPTIONS = {
   sampleRate: 32000,
   sampleBytes: 1,
   channels: 1,
+  speed: 1,
   fps: 60,
   colorFormat: "bgrx",
   alignment: "middle",
@@ -12,6 +13,9 @@ export const DEFAULT_OPTIONS = {
   showPlayhead: true,
   volume: 0.8,
 } satisfies Omit<Options, "filePath">
+
+// Highest rate OpenTUI's audio engine accepts for a sound.
+export const MAX_SAMPLE_RATE = 384000
 
 export const BACKGROUND_COLOR = "#000000"
 export const PANEL_COLOR = "#10151c"
@@ -25,6 +29,8 @@ Options:
   --sample-rate <hz>      PCM sample rate for raw file audio. Default: 32000
   --sample-bytes <1-4>    Bytes per PCM sample. Default: 1
   --channels <1|2>        Audio channel count. Default: 1
+  --speed <auto|n>        Playback speed multiplier. Default: 1
+                          auto matches the byte rate in a WAV header, or 1 for other files.
   --fps <1-120>           Render frames per second. Default: 60
   --format <spec>         Pixel byte format. Default: bgrx
                           r/g/b map bytes to RGB, w maps grayscale, uppercase inverts, x skips.

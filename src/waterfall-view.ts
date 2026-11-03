@@ -7,7 +7,7 @@ import {
 } from "@opentui/core"
 import { basename } from "node:path"
 import { BACKGROUND_COLOR, PANEL_COLOR, PLAYHEAD_COLOR, TEXT_COLOR } from "./constants"
-import { formatBytes, formatTime, truncate } from "./format"
+import { formatBytes, formatSpeed, formatTime, truncate } from "./format"
 import type { ColorFormat, Options } from "./types"
 
 const COLORS = {
@@ -28,6 +28,7 @@ export class WaterfallView {
     private readonly bytes: Uint8Array,
     private readonly colorFormat: ColorFormat,
     private readonly options: Options,
+    private readonly speed: number,
     private readonly durationMs: number,
     private readonly absolutePath: string,
   ) {
@@ -182,7 +183,7 @@ export class WaterfallView {
     )
     const controls =
       ` Space play/pause  R restart  Left/Right seek  Up/Down volume ${volume.toFixed(2)}  ` +
-      `Q/Esc quit  ${this.options.sampleRate} Hz ${this.options.channels}ch ${this.options.sampleBytes * 8}-bit ${this.options.colorFormat}`
+      `Q/Esc quit  ${this.options.sampleRate} Hz ${this.options.channels}ch ${this.options.sampleBytes * 8}-bit ${formatSpeed(this.speed)} ${this.options.colorFormat}`
     const footer = message == null ? controls : ` ${message}  Q/Esc quit`
     this.footer.content = truncate(footer, this.canvasWidth)
   }

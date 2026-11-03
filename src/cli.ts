@@ -1,4 +1,4 @@
-import { DEFAULT_OPTIONS, HELP } from "./constants"
+import { DEFAULT_OPTIONS, HELP, MAX_SAMPLE_RATE } from "./constants"
 import type { Alignment, ColorChannel, ColorFormat, Options } from "./types"
 
 export function parseArgs(argv: string[]): Options {
@@ -46,13 +46,16 @@ export function parseArgs(argv: string[]): Options {
 
     switch (arg) {
       case "--sample-rate":
-        options.sampleRate = parseInteger(value(), "sample rate", 1, 384000)
+        options.sampleRate = parseInteger(value(), "sample rate", 1, MAX_SAMPLE_RATE)
         break
       case "--sample-bytes":
         options.sampleBytes = parseSampleBytes(value())
         break
       case "--channels":
         options.channels = parseChannels(value())
+        break
+      case "--speed":
+        options.speed = parseSpeed(value())
         break
       case "--fps":
         options.fps = parseInteger(value(), "fps", 1, 120)
@@ -161,6 +164,18 @@ function parseChannels(value: string): 1 | 2 {
   const parsed = parseInteger(value, "channels", 1, 2)
   if (parsed !== 1 && parsed !== 2) {
     throw new Error("channels must be 1 or 2.")
+  }
+  return parsed
+}
+
+function parseSpeed(value: string): number | "auto" {
+  if (value === "auto") {
+    return value
+  }
+
+  const parsed = value.trim() === "" ? Number.NaN : Number(value)
+  if (!Number.isFinite(parsed) || parsed <= 0) {
+    throw new Error("speed must be auto or a number greater than 0.")
   }
   return parsed
 }

@@ -1,5 +1,5 @@
 import { Audio } from "@opentui/core"
-import type { Options } from "./types"
+import type { PcmFormat } from "./types"
 import { makeWav } from "./wav"
 
 export class RawAudioPlayer {
@@ -10,7 +10,7 @@ export class RawAudioPlayer {
   constructor(
     private readonly audio: Audio,
     private readonly bytes: Uint8Array,
-    private readonly options: Options,
+    private readonly format: PcmFormat,
     private volume: number,
   ) {
     this.audio.setMasterVolume(volume)
@@ -24,7 +24,7 @@ export class RawAudioPlayer {
       return false
     }
 
-    const wav = makeWav(this.bytes.subarray(offset), this.options)
+    const wav = makeWav(this.bytes.subarray(offset), this.format)
     const sound = this.audio.loadSound(wav)
     if (sound == null) {
       return false
@@ -79,8 +79,8 @@ export class RawAudioPlayer {
   }
 
   private byteOffsetForMs(positionMs: number): number {
-    const blockAlign = this.options.channels * this.options.sampleBytes
-    const rawOffset = Math.floor((positionMs / 1000) * this.options.sampleRate * blockAlign)
+    const blockAlign = this.format.channels * this.format.sampleBytes
+    const rawOffset = Math.floor((positionMs / 1000) * this.format.sampleRate * blockAlign)
     return Math.floor(rawOffset / blockAlign) * blockAlign
   }
 }

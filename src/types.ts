@@ -5,6 +5,7 @@ export type Options = {
   sampleRate: number
   sampleBytes: 1 | 2 | 3 | 4
   channels: 1 | 2
+  speed: number | "auto"
   fps: number
   colorFormat: string
   alignment: Alignment
@@ -12,6 +13,12 @@ export type Options = {
   flipHorizontal: boolean
   showPlayhead: boolean
   volume: number
+}
+
+export type PcmFormat = {
+  sampleRate: number
+  sampleBytes: 1 | 2 | 3 | 4
+  channels: 1 | 2
 }
 
 export type ColorChannel = "r" | "R" | "g" | "G" | "b" | "B" | "w" | "W" | "x"
