@@ -2,6 +2,7 @@ node_modules/
 dist/
 waterfall
 waterfall.exe
+waterfall.js
 mycli
 .DS_Store
 *.log
